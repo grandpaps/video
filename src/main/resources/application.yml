@@ -1,0 +1,49 @@
+# mybatis config
+mybatis:
+  type-aliases-package: com.hniu.video.entity
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    #    驼峰命名法
+    mapUnderscoreToCamelCase: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 配置开发环境
+spring:
+  profiles:
+    active: dev
+  data:
+
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/wwcmdb?useSSL=false&useUnicode=true&characterEncoding=UTF-8&useAffectedRows=true
+    username: root
+    platform: mysql
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+    # 使用alibaba druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+
+  freemarker:
+    request-context-attribute: request  #request访问request
+    suffix: .ftl  #后缀名
+    content-type: text/html
+    enabled: true
+    cache: false #缓存配置
+    template-loader-path: classpath:/templates/ #模板加载路径 按需配置
+    charset: UTF-8 #编码格式
+    settings:
+      number_format: '0.##' #数字格式化，无小数点
+  thymeleaf:
+    cache: false
+  # 上传文件大小限制
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+
+# mybatis分页插件的使用
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql

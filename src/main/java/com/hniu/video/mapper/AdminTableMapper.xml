@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hniu.video.mapper.AdminTableMapper">
+
+    <sql id="base_sql">
+        `id`, `username`, `name`, `passKey`,`mobilePhone`, `addTime`, INET_NTOA(ipAddress) as ipAddress, `status`, `lastTime`
+    </sql>
+    <sql id="single_sql">
+        `id`, `username`, `name`, `passKey`, CONCAT_WS('****', substring(mobilePhone, 1, 3), substring(mobilePhone, 8, 4)) AS `mobilePhone`, `addTime`, INET_NTOA(ipAddress) as ipAddress, `status`, `lastTime`
+    </sql>
+
+    <!--插入管理员数据-->
+    <insert id="insertAdminTable" parameterType="com.hniu.video.entity.AdminTableEx">
+        INSERT into admin_table (username,mobilePhone)
+        VALUES (#{username}, #{mobilePhone})
+    </insert>
+    <!--查看所有管理员-->
+    <select id="listAdminTable" resultType="com.hniu.video.entity.AdminTableEx">
+        select
+        <include refid="single_sql"/>
+        from admin_table
+    </select>
+    <!--根据id来查看管理信息-->
+    <select id="queryAdminTable" parameterType="int" resultType="com.hniu.video.entity.AdminTableEx">
+        select
+        <include refid="base_sql"/>
+        from admin_table
+        where id=#{id}
+    </select>
+    <select id="login" resultType="com.hniu.video.entity.AdminTableEx">
+        SELECT
+        <include refid="base_sql"/>
+        FROM admin_table
+        WHERE `username`=#{username} AND `passKey`=#{passKey}
+    </select>
+    <select id="listAdminTableExForIndex" resultType="com.hniu.video.entity.AdminTableEx">
+        SELECT `id`, `name`
+        FROM admin_table
+    </select>
+    <!--根据id来修改管理信息-->
+    <update id="updateAdminTable" parameterType="com.hniu.video.entity.AdminTableEx">
+        update admin_table
+        <set>
+            <if test="username!=null">username=#{username},</if>
+            <if test="name!=null">`name`=#{name},</if>
+            <if test="passKey!=null">passKey=#{passKey},</if>
+            <if test="mobilePhone!=null">mobilePhone=#{mobilePhone},</if>
+            <if test="status!=null">`status`=#{status},</if>
+            <if test="lastTime!=null">lastTime=#{lastTime},</if>
+            <if test="ipAddress!=null">ipAddress=inet_aton(#{ipAddress}),</if>
+        </set>
+        where id = #{id}
+    </update>
+    <select id="queryAdminByUserName" parameterType="String" resultType="int">
+        select count(*)
+        from admin_table
+        where username = #{username}
+           or mobilePhone = #{username }
+    </select>
+    <select id="queryAdminByUserNames" parameterType="String" resultType="com.hniu.video.entity.AdminTableEx">
+        select
+        <include refid="base_sql"/>
+        from admin_table
+        where username=#{username} or mobilePhone = #{username}
+    </select>
+    <select id="queryAdminByName" parameterType="String" resultType="int">
+        select count(*)
+        from admin_table
+        where name = #{name}
+    </select>
+</mapper>
