@@ -15,7 +15,7 @@ spring:
 
 
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/wwcmdb?useSSL=false&useUnicode=true&characterEncoding=UTF-8&useAffectedRows=true
+    url: jdbc:mysql://47.100.215.211:3306/video?useSSL=false&useUnicode=true&characterEncoding=UTF-8&useAffectedRows=true
     username: root
     platform: mysql
     password: root
